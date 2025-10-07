@@ -92,7 +92,7 @@ function clearTerminal(){
   running = false;
 }
 
-async function run(speed = 80){
+async function run(speed = 70){
   if (running) return;
   running = true;
   terminal.textContent = '';
@@ -144,7 +144,7 @@ copyBtn.addEventListener('click', async ()=>{
   }
 });
 
-run(80); // Auto-run slower typing
+run(70); // Auto-run slower typing
 </script>
 </body>
 </html>
