@@ -98,7 +98,7 @@ async function run(speed = 100){
   terminal.textContent = '';
   for (let i = 0; i < lines.length; i++){
     await typeLine(lines[i], speed);
-    if (i < lines.length - 1) await pause(350);
+    if (i < lines.length - 1) await pause(800);
   }
   running = false;
 }
