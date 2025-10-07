@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>birthday.exe — For Cuppy 💖</title>
+<style>
+  :root { --bg:#071018; --text:#00ffd6; --muted:#7fffd6; --accent:#ff6b9f; }
+  *{box-sizing:border-box}
+  body{ background:var(--bg); color:var(--text); font-family:"Courier New", monospace; margin:0; padding:24px; display:flex; min-height:100vh; align-items:flex-start; justify-content:center;}
+  .wrap{ max-width:900px; width:100%; }
+  .screen{ background:rgba(0,0,0,0.45); border-radius:12px; padding:22px; box-shadow:0 8px 30px rgba(0,0,0,0.6); overflow:auto; max-height:60vh;}
+  pre#terminal{ font-family:inherit; white-space:pre-wrap; line-height:1.45; margin:0; font-size:16px; color:var(--text); min-height:220px;}
+  .cursor{display:inline-block;width:10px;background:var(--text);vertical-align:middle;animation:blink 1s steps(2) infinite;margin-left:6px;}
+  @keyframes blink{50%{background:transparent}}
+  .controls{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
+  button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--text);padding:8px 10px;border-radius:8px;cursor:pointer;}
+  button:hover{transform:translateY(-2px);}
+  .small{font-size:13px;color:var(--muted);margin-top:8px;}
+  @media(max-width:520px){body{padding:12px;}pre#terminal{font-size:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="screen" role="region" aria-label="Birthday terminal">
+    <pre id="terminal" aria-live="polite"></pre><span class="cursor" aria-hidden="true"></span>
+  </div>
+
+  <div class="controls">
+    <button id="replay">Replay</button>
+    <button id="reveal">Reveal instantly</button>
+    <button id="download">Download</button>
+    <button id="copy">Copy letter</button>
+  </div>
+
+  <div class="small">Tip: To edit later, change <code>index.html</code> in your GitHub repo and commit again.</div>
+</div>
+
+<script>
+const lines = [
+"Initializing birthday.exe 🎉",
+"Loading affection protocols... 💕",
+"Compiling love message...",
+"",
+"💻  Happy Birthday, Cuppy! 💖",
+"",
+"If you're reading this, it means the code worked :) ",
+"And also... that I love you. A lot. More than a fat kid loves cake 😘. I know this year we are not together so I have a little letter down below for you so buckle up!",
+"",
+"I wish you you the *happiest* birthday ever!",
+"May you have a great day, a beautiful new year of life, and dear God may this code run perfectly💫", 
+"",
+"Processing secret message... 🔐 I mean it's not really a secret but ... processing",
+"Decrypting feelings.txt 💌",
+"",
+`Dear Cuppy,
+
+Today is your birthday! Happy birthday! I know you don’t celebrate anymore, but I still do, and that won’t be changing any time soon. An ocean of miles may lie between us, but I will bridge it with every bit of love I can send your way because you deserve to be celebrated.
+
+It has been 459 days since you and I became a team. I may not be able to walk you through each one of these days, but I will try to encapsulate how all they have felt with you.
+
+More than any other location or memory, you are where I feel like I truly belong. Being with you, in whatever form, feels like the final, weary, and wonderful exhale of arriving home after a very long journey. You are the equivalent of coming home. You are home to me. The moment I am with you, no matter how bad, long, happy or boring the day has been for me, it feels like walking through a door I've walked through thousands of times into a place of comfort, so much love and understanding. A foundation that has not once wavered.
+
+I always tell you how pretty your eyes are and they are, so so beautiful, but it’s always been more than their color. Looking into those eyes, the whole world settles. I feel calm and loved in a way that is my truest home. A more genuine truth of the matter is, your eyes are merely a reflection of a much more beautiful heart and soul behind them. Being loved by you has not merely made me happy; it feels like I have really won. It is a deep and humbling victory.
+
+Thank you for loving me rightly, for listening, for caring, for the man you are, and for all the memories we have built. I hold each one of them deeply within my heart. I am so incredibly glad to be on this journey with you, and the luckiest girl in the world to be walking it with you.
+
+I love you beyond measure and deep within my soul until the end of time. No matter what, I will never, ever not love you. Now, I do not know what shape our future takes or even if such a thing really exists, I merely know for sure what may come along but I hope we can face it together. And if the road ends, well, that will be little consolation because I will have known love from one of the finest, most amazing people to ever walk this earth. Not for one second have I ever regretted being with you, not now, not ever.
+I have become so much more just by being with you. You have helped me in ways I don't even think you realize, with the calm wisdom that always knows what is right to say or do. I am so very grateful. I cannot picture loving anyone else the way I do you, Cuppy. The very thought is impossible. Absurd even.
+
+I could go on for pages. But today, I want to say the very thing that matters the most: I love you, and I wish you a truly happy birthday.
+
+All my heart and love, 
+Your Muffin 💌`,
+"",
+">>> End of program.",
+"I love you ❤️"
+];
+
+const terminal = document.getElementById('terminal');
+const replayBtn = document.getElementById('replay');
+const revealBtn = document.getElementById('reveal');
+const downloadBtn = document.getElementById('download');
+const copyBtn = document.getElementById('copy');
+let running = false;
+let currentTimeouts = [];
+
+function clearTerminal(){
+  terminal.textContent='';
+  currentTimeouts.forEach(t => clearTimeout(t));
+  currentTimeouts = [];
+  running = false;
+}
+
+async function run(speed = 30){
+  if (running) return;
+  running = true;
+  terminal.textContent = '';
+  for (let i = 0; i < lines.length; i++){
+    await typeLine(lines[i], speed);
+    if (i < lines.length - 1) await pause(350);
+  }
+  running = false;
+}
+
+function pause(ms){ return new Promise(resolve => { const t = setTimeout(resolve, ms); currentTimeouts.push(t); }); }
+
+function typeLine(line, speed){
+  return new Promise(resolve => {
+    let j = 0;
+    function step(){
+      if (j < line.length){
+        terminal.textContent += line[j++];
+        terminal.parentElement.scrollTop = terminal.parentElement.scrollHeight;
+        const t = setTimeout(step, speed);
+        currentTimeouts.push(t);
+      } else {
+        terminal.textContent += '\n';
+        resolve();
+      }
+    }
+    step();
+  });
+}
+
+replayBtn.addEventListener('click', ()=>{ clearTerminal(); run(); });
+revealBtn.addEventListener('click', ()=>{ clearTerminal(); terminal.textContent = lines.join('\\n'); });
+downloadBtn.addEventListener('click', ()=>{
+  const blob = new Blob([lines.join('\\n')], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'love-letter.txt'; document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+copyBtn.addEventListener('click', async ()=>{
+  try{
+    await navigator.clipboard.writeText(lines.join('\\n'));
+    const old = copyBtn.textContent;
+    copyBtn.textContent = 'Copied!';
+    setTimeout(()=>copyBtn.textContent = old, 1400);
+  }catch(e){
+    copyBtn.textContent = 'Copy failed';
+    setTimeout(()=>copyBtn.textContent = 'Copy letter', 1400);
+  }
+});
+
+run(); // Auto-run on load
+</script>
+</body>
+</html>
