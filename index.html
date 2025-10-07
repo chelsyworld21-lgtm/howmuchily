@@ -51,7 +51,7 @@ const lines = [
 "Firstly, I want to wish you the *happiest* birthday!",
 "May you have a great day, a beautiful new year of life, and dear God may this code run perfectly 💫", 
 "",
-"Processing secret message... 🔐 I mean it's not really a secret butnprocessing nonetheless....",
+"Processing secret message... 🔐 I mean it's not really a secret but processing nonetheless....",
 "Decrypting feelings.txt 💌 *cough cough* wassup sexy ;) ",
 "Here comes your letter, Ready?",
   
@@ -99,8 +99,15 @@ async function run(speed = 80){
   running = true;
   terminal.textContent = '';
   for (let i = 0; i < lines.length; i++){
+    // Detect when the actual love letter starts
+    if (lines[i].startsWith("Dear Cuppy")) {
+      speed = 95; // slow down typing a bit for the letter
+      await pause(1000); // pause briefly before showing it
+    }
     await typeLine(lines[i], speed);
-    if (i < lines.length - 1) await pause(600);
+    if (i < lines.length - 1) {
+      await pause(lines[i].startsWith("Dear Cuppy") ? 800 : 600);
+    }
   }
   running = false;
 }
