@@ -92,13 +92,13 @@ function clearTerminal(){
   running = false;
 }
 
-async function run(speed = 100){
+async function run(speed = 80){
   if (running) return;
   running = true;
   terminal.textContent = '';
   for (let i = 0; i < lines.length; i++){
     await typeLine(lines[i], speed);
-    if (i < lines.length - 1) await pause(800);
+    if (i < lines.length - 1) await pause(600);
   }
   running = false;
 }
@@ -144,7 +144,7 @@ copyBtn.addEventListener('click', async ()=>{
   }
 });
 
-run(100); // Auto-run slower typing
+run(80); // Auto-run slower typing
 </script>
 </body>
 </html>
